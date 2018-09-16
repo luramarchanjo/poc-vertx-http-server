@@ -1,23 +1,30 @@
 # Overview
 
-This is a simple poc using [vert.x] to create reactive java applications.
-
+This is a simple poc using [vertx-web] to create java web applications.
 
 ## Test
 
-You can see in the log one message created and 3 consumers received this message.
+1. Start your application.
 
-### Producers
+2. Execute the commands to test your application
 
-`PublisherVerticle - Publishing Message(id=66abe68d-5ac2-4f1d-8daf-639e8c0e3b18) to message-channel`
+**POST**
+
+`curl -d '{"name" : "test1"}' -H "Content-Type: application/json" -X POST http://localhost:8080/api/v1/products`
+
+`curl -d '{"name" : "test2"}' -H "Content-Type: application/json" -X POST http://localhost:8080/api/v1/products`
+
+`curl -d '{"name" : "test3"}' -H "Content-Type: application/json" -X POST http://localhost:8080/api/v1/products`
 
 
-### Consumers
+**GET**
 
-`SubscriberVerticle[2] - Consuming Message(id=66abe68d-5ac2-4f1d-8daf-639e8c0e3b18) from message-channel`
+`curl -X GET http://localhost:8080/api/v1/products`
 
-`SubscriberVerticle[1] - Consuming Message(id=66abe68d-5ac2-4f1d-8daf-639e8c0e3b18) from message-channel`
+**PUT**
 
-`SubscriberVerticle[3] - Consuming Message(id=66abe68d-5ac2-4f1d-8daf-639e8c0e3b18) from message-channel`
+`curl -d '{"name" : "test-put"}' -H "Content-Type: application/json" -X PUT http://localhost:8080/api/v1/products/3f1423b7-c8e2-4ed1-987a-19079af794e4`
 
-[vert.x]: https://vertx.io/
+**DELETE**
+
+`curl -X DELETE http://localhost:8080/api/v1/products/3f1423b7-c8e2-4ed1-987a-19079af794e4`
