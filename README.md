@@ -28,3 +28,6 @@ This is a simple poc using [vertx-web] to create java web applications.
 **DELETE**
 
 `curl -X DELETE http://localhost:8080/api/v1/products/3f1423b7-c8e2-4ed1-987a-19079af794e4`
+
+
+[vertx-web]: https://vertx.io/docs/vertx-web/java/
