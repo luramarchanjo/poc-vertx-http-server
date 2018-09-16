@@ -12,10 +12,6 @@ This is a simple poc using [vertx-web] to create java web applications.
 
 `curl -d '{"name" : "test1"}' -H "Content-Type: application/json" -X POST http://localhost:8080/api/v1/products`
 
-`curl -d '{"name" : "test2"}' -H "Content-Type: application/json" -X POST http://localhost:8080/api/v1/products`
-
-`curl -d '{"name" : "test3"}' -H "Content-Type: application/json" -X POST http://localhost:8080/api/v1/products`
-
 
 **GET**
 
