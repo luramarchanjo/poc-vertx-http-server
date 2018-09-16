@@ -2,6 +2,7 @@ package app;
 
 import app.domain.Product;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import io.netty.handler.codec.http.HttpHeaderValues;
 import io.netty.handler.codec.http.HttpResponseStatus;
 import io.vertx.core.http.HttpServerRequest;
 import io.vertx.core.http.HttpServerResponse;
@@ -25,6 +26,7 @@ public class ProductRouter {
 
   private static final Logger logger = LoggerFactory.getLogger(ProductRouter.class);
   private final Map<String, Product> productMap = new ConcurrentHashMap<>();
+  private final String produces = HttpHeaderValues.APPLICATION_JSON.toString();
   private final String resource = "/api/v1/products";
   private Router mainRouter;
 
@@ -36,7 +38,7 @@ public class ProductRouter {
   }
 
   private void createGetResource() {
-    mainRouter.get(resource).handler(routingContext -> {
+    mainRouter.get(resource).produces(produces).handler(routingContext -> {
       HttpServerResponse httpServerResponse = routingContext.response();
 
       try {
@@ -52,7 +54,7 @@ public class ProductRouter {
   }
 
   private void createPostResource() {
-    mainRouter.post(resource).handler(routingContext -> {
+    mainRouter.post(resource).produces(produces).handler(routingContext -> {
       HttpServerResponse httpServerResponse = routingContext.response();
 
       try {
@@ -69,7 +71,7 @@ public class ProductRouter {
   }
 
   private void createPutResource() {
-    mainRouter.put(resource + "/:id").handler(routingContext -> {
+    mainRouter.put(resource + "/:id").produces(produces).handler(routingContext -> {
       HttpServerRequest httpServerRequest = routingContext.request();
       HttpServerResponse httpServerResponse = routingContext.response();
 
@@ -94,20 +96,20 @@ public class ProductRouter {
   }
 
   private void createDeleteResource() {
-    mainRouter.delete(resource + "/:id").handler(routingContext -> {
-      HttpServerRequest httpServerRequest = routingContext.request();
-      HttpServerResponse httpServerResponse = routingContext.response();
+    mainRouter.delete(resource + "/:id").produces(produces).handler(routingContext -> {
+        HttpServerRequest httpServerRequest = routingContext.request();
+        HttpServerResponse httpServerResponse = routingContext.response();
 
-      String productId = httpServerRequest.getParam("id");
-      Product product = productMap.get(productId);
-      if (Objects.isNull(product)) {
-        httpServerResponse.setStatusCode(HttpResponseStatus.NOT_FOUND.code());
-      } else {
-        productMap.remove(productId);
-      }
+        String productId = httpServerRequest.getParam("id");
+        Product product = productMap.get(productId);
+        if (Objects.isNull(product)) {
+          httpServerResponse.setStatusCode(HttpResponseStatus.NOT_FOUND.code());
+        } else {
+          productMap.remove(productId);
+        }
 
-      httpServerResponse.end();
-    });
+        httpServerResponse.end();
+      });
   }
 
 }

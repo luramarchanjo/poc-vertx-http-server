@@ -2,13 +2,13 @@ package app;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.vertx.core.Vertx;
-import io.vertx.core.http.HttpServerRequest;
-import io.vertx.core.http.HttpServerResponse;
 import io.vertx.core.logging.Logger;
 import io.vertx.core.logging.LoggerFactory;
 import io.vertx.ext.web.Router;
 import io.vertx.ext.web.handler.BodyHandler;
 import io.vertx.ext.web.handler.CookieHandler;
+import io.vertx.ext.web.handler.LoggerHandler;
+import io.vertx.ext.web.handler.ResponseContentTypeHandler;
 
 public class Application {
 
@@ -20,18 +20,12 @@ public class Application {
     Vertx vertx = Vertx.vertx();
 
     Router mainRouter = Router.router(vertx);
-    mainRouter.route().handler(BodyHandler.create()); // Enable BodyHandler
-    mainRouter.route().handler(CookieHandler.create()); // Enable CookieHandler
 
-    // Global request handler
-    mainRouter.route().handler(routingContext -> {
-      HttpServerRequest httpServerRequest = routingContext.request();
-      HttpServerResponse httpServerResponse = httpServerRequest.response();
-      httpServerResponse.putHeader("content-type", "application/json");
-      logger.info(String.format("Receveid request %s - %s", httpServerRequest.method(),
-        httpServerRequest.uri()));
-      routingContext.next();
-    });
+    // Global Handlers
+    mainRouter.route().handler(BodyHandler.create());
+    mainRouter.route().handler(CookieHandler.create());
+    mainRouter.route().handler(LoggerHandler.create());
+    mainRouter.route().handler(ResponseContentTypeHandler.create());
 
     // Product resources (GET, POST, PUT, DELETE)
     ProductRouter.builder().mainRouter(mainRouter).build().createResources();
