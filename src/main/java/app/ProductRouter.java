@@ -62,6 +62,7 @@ public class ProductRouter {
         Product product = Application.OBJECT_MAPPER
           .readValue(requestJson.toString(), Product.class);
         productMap.put(product.getId(), product);
+        httpServerResponse.setStatusCode(HttpResponseStatus.CREATED.code());
       } catch (Exception e) {
         logger.error("Error", e);
       } finally {
